@@ -9,13 +9,13 @@ RUN cd /go/src/github.com/anchorfree/k8s-resource-updater \
 
 FROM alpine
 
+COPY --from=0 /build/k8s-resource-updater /
+
 ENV CONSUL_TEMPLATE_VERSION 0.19.4
 
 RUN apk add --update-cache --no-cache ca-certificates curl netcat-openbsd
 RUN mkdir -p /opt/templates && mkdir /etc/consul-templater
 RUN mkdir /output && wget -qO- https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.tgz | tar xvz -C /bin
-
-COPY --from=0 /build/k8s-resource-updater /
 
 COPY entrypoint.sh /entrypoint.sh
 
